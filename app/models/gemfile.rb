@@ -10,6 +10,10 @@ class Gemfile < ApplicationRecord
   # Validate that content contains at least one gem
   validate :gemfile_contains_gems
 
+  def self.search(query)
+    Gemfile.where('name ILIKE ?', "%#{query}%").or(where('content ILIKE ?', "%#{query}%"))
+  end
+
   def count_gems
     self.content.split("\n").select { |line| line.strip.start_with?("gem") }.count
   end
@@ -21,7 +25,7 @@ class Gemfile < ApplicationRecord
     self.content.split("\n").each do |line|
       if line.strip.start_with?("gem")
         gem_name = line.strip.split(" ")[1]
-        
+
         # only continue if gem_name.strip is not empty
         if gem_name.present?
           # remove any quotes from the gem name
