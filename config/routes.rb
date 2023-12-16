@@ -12,6 +12,9 @@ Rails.application.routes.draw do
       post "favorite", to: "gemfiles#favorite"
       delete "unfavorite", to: "gemfiles#unfavorite"
     end
+
+    get :search, on: :collection
+
   end
 
   resources :gems
